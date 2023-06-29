@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+import {BASE_URL, User} from "./common";
+import {UserInfo, Button} from "./components";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [item, setItem] = useState<User | null>(null);
+
+    const receiveRandomUser = async () => {
+        const id = Math.floor(Math.random() * (10 - 1)) + 1;
+        const response = await fetch(`${BASE_URL}/${id}`);
+        const _user = (await response.json()) as User;
+        setItem(_user)
+    };
+
+    const handleButtonClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        event.stopPropagation();
+        receiveRandomUser()
+    };
+
+    return (
+        <div>
+            <header>Get a random user</header>
+            <Button onClick={handleButtonClick}/>
+            {item && (
+                <UserInfo user={item}/>
+            )}
+        </div>
+    );
 }
 
 export default App;
