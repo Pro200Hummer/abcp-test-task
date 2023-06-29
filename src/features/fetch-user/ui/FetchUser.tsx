@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, UserInfo} from "../../../components";
-import {BASE_URL, getFromSessionStorage, setToSessionStorage, User, useThrottle} from "../../../common";
+import {getFromSessionStorage, User, useThrottle} from "../../../common";
+import {receiveRandomUser} from "../api";
 
 export const FetchUser = () => {
     const [item, setItem] = useState<User | null>(null);
@@ -12,19 +13,11 @@ export const FetchUser = () => {
         cachedUser && setItem(cachedUser)
     }, [])
 
-    const receiveRandomUser = async () => {
-        const id = Math.floor(Math.random() * (10 - 1)) + 1;
-        const response = await fetch(`${BASE_URL}/${id}`);
-        const _user = (await response.json()) as User;
-        setItem(_user)
-        setToSessionStorage('user', _user)
-    };
-
     const handleButtonClick = useCallback((
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         event.stopPropagation();
-        receiveRandomUser()
+        receiveRandomUser(setItem)
     }, []);
 
     return (
