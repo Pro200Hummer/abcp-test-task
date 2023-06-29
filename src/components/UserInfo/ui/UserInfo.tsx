@@ -1,19 +1,27 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {IUserInfoProps} from "../types";
+import {generateNestedKeys, userInfoSchema} from "../utils";
 
 export function UserInfo({user}: IUserInfoProps) {
+
+    const userInfo = useMemo(() => {
+        return generateNestedKeys(userInfoSchema, user)
+    }, [user])
+
     return (
         <table>
             <thead>
             <tr>
-                <th>Username</th>
-                <th>Phone number</th>
+                {userInfo[0].map((item, index) => (
+                    <th key={`${item}_${index}`}>{item}</th>
+                ))}
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>{user.name}</td>
-                <td>{user.phone}</td>
+                {userInfo[1].map((item, index) => (
+                    <th key={`${item}_${index}`}>{item}</th>
+                ))}
             </tr>
             </tbody>
         </table>

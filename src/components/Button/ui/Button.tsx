@@ -1,10 +1,11 @@
-import React from "react";
+import React, {FC} from "react";
 import {IButtonProps} from "../types";
 
-export function Button({onClick}: IButtonProps): JSX.Element {
+export const Button: FC<IButtonProps> = React.memo(({onClick}) =>{
+    console.log('Button rendered')
     return (
         <button type="button" onClick={onClick}>
             get random user
         </button>
     );
-}
+})
